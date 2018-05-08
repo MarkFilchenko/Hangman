@@ -23,33 +23,34 @@ public class Join {
 
         JPanel button = new JPanel();
         JButton join = new JButton("Join Game");
-//        start.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                if (text.getText().length() == 0) {
+        join.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                ADD CHECKS HERE: IF IP ADDRESS IS VALID
+//
+//                if (!InetAddressValidator) {
 //                    JOptionPane.showMessageDialog(frame, "Please enter a word/phrase.", "Error", JOptionPane.ERROR_MESSAGE);
 //                }
 //                else if (text.getText().length() > 18) {
 //                    JOptionPane.showMessageDialog(frame, "Your word/phrase should be less than 19 characters", "Error", JOptionPane.ERROR_MESSAGE);
 //                }
 //                else {
-//                    JDialog dialog = new JDialog();
-//                    dialog.setTitle("Waiting...");
-//                    JOptionPane wait = null;
-//                    try {
-//                        wait = new JOptionPane("Waiting for player 2 to connect\nIP: " + InetAddress.getLocalHost().getHostAddress(), JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
-//                    } catch (UnknownHostException e1) {
-//                        e1.printStackTrace();
-//                    }
-//                    dialog.setContentPane(wait);
-//                    dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-//                    dialog.pack();
-//                    dialog.setLocationRelativeTo(frame);
-//                    dialog.setVisible(true);
+                    JDialog dialog = new JDialog();
+                    dialog.setTitle("Joining...");
+                    JOptionPane wait = null;
+                    try {
+                        wait = new JOptionPane("Joining game\nIP: " + InetAddress.getLocalHost().getHostAddress(), JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+                    } catch (UnknownHostException e1) {
+                        e1.printStackTrace();
+                    }
+                    dialog.setContentPane(wait);
+                    dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                    dialog.pack();
+                    dialog.setLocationRelativeTo(frame);
+                    dialog.setVisible(true);
 //                }
-//
-//            }
-//        });
+            }
+        });
 
         button.add(join);
 

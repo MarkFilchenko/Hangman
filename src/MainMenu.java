@@ -31,7 +31,8 @@ public class MainMenu {
         joinGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Join j = new Join();
+                frame.dispose();
             }
         });
 

@@ -19,7 +19,7 @@ public class Host {
         JPanel heading = new JPanel();
         heading.setLayout(new GridLayout(2,1));
         JLabel title = new JLabel("Enter a word or phrase:", SwingConstants.CENTER);
-        JLabel note = new JLabel("(must be less than 18 characters)", SwingConstants.CENTER);
+        JLabel note = new JLabel("(must be less than 19 characters)", SwingConstants.CENTER);
 
         heading.add(title);
         heading.add(note);
@@ -34,7 +34,16 @@ public class Host {
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (text.getText().length() > 0 && isAlpha(text.getText())) {
+                if (!isAlpha(text.getText())) {
+                    JOptionPane.showMessageDialog(frame, "Your word/phrase should only contain letters!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else if (text.getText().length() == 0) {
+                    JOptionPane.showMessageDialog(frame, "Please enter a word/phrase.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else if (text.getText().length() > 18) {
+                    JOptionPane.showMessageDialog(frame, "Your word/phrase should be less than 19 characters", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Waiting...");
                     JOptionPane wait = null;
@@ -49,13 +58,7 @@ public class Host {
                     dialog.setLocationRelativeTo(frame);
                     dialog.setVisible(true);
                 }
-                else if (text.getText().length() > 0 && !isAlpha(text.getText())) {
-                    JOptionPane.showMessageDialog(frame, "Your word/phrase should not contain numbers!", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-                else if (text.getText().length() == 0) {
-                    JOptionPane.showMessageDialog(frame, "Please enter a word/phrase.", "Error", JOptionPane.ERROR_MESSAGE);
 
-                }
             }
         });
 
@@ -77,7 +80,7 @@ public class Host {
     public static boolean isAlpha(String s) {
         char[]chars = s.toCharArray();
         for (char c : chars) {
-            if(!Character.isLetter(c)) {
+            if(!Character.isLetter(c) && !Character.isSpaceChar(c)) {
                 return false;
             }
         }

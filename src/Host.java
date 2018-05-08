@@ -42,6 +42,7 @@ public class Host {
                     JOptionPane.showMessageDialog(frame, "Your word/phrase should be less than 19 characters", "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
+//                  DISPOSE AFTER CONNECTION ESTABLISHED
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Waiting...");
                     JOptionPane wait = null;

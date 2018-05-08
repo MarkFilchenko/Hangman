@@ -11,7 +11,7 @@ public class Join {
         JFrame frame = new JFrame();
 
         JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createEmptyBorder(30,30,30,30));
+        panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         panel.setLayout(new BorderLayout());
 
         JLabel title = new JLabel("Enter IP Address:", SwingConstants.CENTER);
@@ -26,29 +26,31 @@ public class Join {
         join.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                ADD CHECKS HERE: IF IP ADDRESS IS VALID
+//              FOR TESTING PURPOSES ONLY
+                try {
+                    JOptionPane.showMessageDialog(frame, "Joining game\nIP: " + InetAddress.getLocalHost().getHostAddress(), "Joining...", JOptionPane.INFORMATION_MESSAGE);
+                } catch (UnknownHostException e1) {
+                    e1.printStackTrace();
+                }
+                Game g = new Game();
+                frame.dispose();
+
+//              ADD CHECKS HERE: IF IP ADDRESS IS VALID
 //
-//                if (!InetAddressValidator) {
-//                    JOptionPane.showMessageDialog(frame, "Please enter a word/phrase.", "Error", JOptionPane.ERROR_MESSAGE);
+//              DISPOSE DIALOG AFTER CONNECTION ESTABLISHED
+//                JDialog dialog = new JDialog();
+//                dialog.setTitle("Joining...");
+//                JOptionPane wait = null;
+//                try {
+//                    wait = new JOptionPane("Joining game\nIP: " + InetAddress.getLocalHost().getHostAddress(), JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+//                } catch (UnknownHostException e1) {
+//                    e1.printStackTrace();
 //                }
-//                else if (text.getText().length() > 18) {
-//                    JOptionPane.showMessageDialog(frame, "Your word/phrase should be less than 19 characters", "Error", JOptionPane.ERROR_MESSAGE);
-//                }
-//                else {
-                    JDialog dialog = new JDialog();
-                    dialog.setTitle("Joining...");
-                    JOptionPane wait = null;
-                    try {
-                        wait = new JOptionPane("Joining game\nIP: " + InetAddress.getLocalHost().getHostAddress(), JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
-                    } catch (UnknownHostException e1) {
-                        e1.printStackTrace();
-                    }
-                    dialog.setContentPane(wait);
-                    dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-                    dialog.pack();
-                    dialog.setLocationRelativeTo(frame);
-                    dialog.setVisible(true);
-//                }
+//                dialog.setContentPane(wait);
+//                dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+//                dialog.pack();
+//                dialog.setLocationRelativeTo(frame);
+//                dialog.setVisible(true);
             }
         });
 
@@ -61,7 +63,7 @@ public class Join {
         frame.setLayout(new BorderLayout());
         frame.add(panel, BorderLayout.CENTER);
 
-        frame.setSize(500,200);
+        frame.setSize(500, 200);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);

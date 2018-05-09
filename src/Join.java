@@ -38,6 +38,7 @@ public class Join {
                 if (text.getText().equals("")) {
                     JOptionPane.showMessageDialog(frame, "The IP address cannot be empty!!", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
+                    //Connects to server, if exception is caught, then JOptionPane is displayed with error message
                     try {
                         connectToServer(text.getText());
                     } catch (Exception ex) {
@@ -45,6 +46,7 @@ public class Join {
                         return;
                     }
 
+                    //Sleep to make sure the connect to server fully finished
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException iEx) {
@@ -61,6 +63,9 @@ public class Join {
                     dialog.setLocationRelativeTo(frame);
                     dialog.setVisible(true);
 
+
+                    //New thread is ran to getphrase and keep waiting until the phrase is received and the connection is established, after it is then game is started
+                    //Separate thread to separate GUI and server logic
                     new Thread() {
                         @Override
                         public void run() {
@@ -98,10 +103,10 @@ public class Join {
     }
 
 
-    //Method to connect to the server with the IP Adress aHost
+    //Method to connect to the server with the IP Address aHost
     public void connectToServer(String aHost) throws Exception {
 
-        //Gets the 
+        //Checks if the host is not something wild like letters or not formatted correctly, if it isnt then an exception is thrown
         try {
             Join.host = InetAddress.getByName(aHost);
         } catch (UnknownHostException uEx) {
@@ -110,6 +115,7 @@ public class Join {
         Socket link;
         try
         {
+            //Next lines attempt to connect to the server, if connection is refused then an exception is thrown
             Socket sock = new Socket();
             final int timeOut = (int) TimeUnit.SECONDS.toMillis(2); // 5 sec wait period
             try {
@@ -118,6 +124,7 @@ public class Join {
                 throw new Exception();
             }
 
+            //Socket, input, output are setup and the connection message is sent
             link = new Socket(Join.host,PORT);
             Scanner input =	new Scanner(link.getInputStream());
             PrintWriter output = new PrintWriter(link.getOutputStream(), true);
@@ -135,11 +142,14 @@ public class Join {
         }
     }
 
+    //Returns the main game phrase from the server
     public String getPhrase() {
         String phrase = null;
         Socket link;
         try
         {
+
+            //Socket,input,output setup and command is sent to server to retrieve phrase, phrase is stored in phrase variable
             link = new Socket(Join.host,PORT);
             Scanner input =	new Scanner(link.getInputStream());
             PrintWriter output = new PrintWriter(link.getOutputStream(), true);

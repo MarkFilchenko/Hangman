@@ -22,7 +22,7 @@ public class MainMenu {
         hostAGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Host h = new Host();
+                Host h = new Host(frame);
                 frame.dispose();
             }
         });
@@ -31,7 +31,7 @@ public class MainMenu {
         joinGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Join j = new Join();
+                Join j = new Join(frame);
                 frame.dispose();
             }
         });

@@ -5,7 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Game {
 
@@ -15,8 +21,13 @@ public class Game {
     String currentWord;
     Boolean solved = false;
     int numOfErrors = 0;
+    boolean disabled = false;
+    public int PORT = 1234;
+    public InetAddress host;
 
-    public Game() {
+    public Game(boolean disabled, String phrase, InetAddress aHost) {
+        host = aHost;
+        this.disabled = disabled;
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
@@ -24,7 +35,7 @@ public class Game {
 
         JPanel phrasePanel = new JPanel();
 //      FOR TESTING PURPOSES ONLY, set word = inputted word from host
-        word = "sam";
+        word = phrase;
 
         //Fill phraseArr with letters from word
         for (int i = 0; i < word.length(); i++) {
@@ -59,11 +70,32 @@ public class Game {
         for (char alphabet = 'A'; alphabet <= 'Z'; alphabet++) {
             JButton button = new JButton(Character.toString(alphabet));
             buttons.add(button);
+            if (disabled) {
+                button.setEnabled(false);
+            }
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    Socket link = null;
+                    String response = "";
+                    try
+                    {
+                        link = new Socket(host,PORT);
+                        Scanner input =	new Scanner(link.getInputStream());
+                        PrintWriter output = new PrintWriter(link.getOutputStream(), true);
+
+                        output.println("GUESS:" + button.getText());
+
+                        response = input.nextLine();
+                        System.out.println("\n" + response);
+
+                    }
+                    catch(IOException ioEx)
+                    {
+                        ioEx.printStackTrace();
+                    }
                     if (!solved) {
-                        if (word.contains(button.getText().toLowerCase())) {
+                        if (response.equals("YES")) {
                             button.setEnabled(false);
                             for (int i = 0; i < phraseArr.size(); i++) {
                                 if (phraseArr.get(i).equals(button.getText().toLowerCase())) {

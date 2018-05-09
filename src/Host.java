@@ -2,12 +2,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class Host {
 
-    public Host() {
+    public int PORT = 1234;
+    public InetAddress host;
+    public boolean connected = false;
+    public static String phrase;
+
+
+    public Host(JFrame aFrame) {
         JFrame frame = new JFrame();
 
         JPanel panel = new JPanel();
@@ -42,7 +52,13 @@ public class Host {
                     JOptionPane.showMessageDialog(frame, "Your word/phrase should be less than 19 characters", "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
+
+                    Host.phrase = text.getText();
+                    System.out.println(Host.phrase);
+
+
 //                  DISPOSE AFTER CONNECTION ESTABLISHED
+
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Waiting...");
                     JOptionPane wait = null;
@@ -56,6 +72,30 @@ public class Host {
                     dialog.pack();
                     dialog.setLocationRelativeTo(frame);
                     dialog.setVisible(true);
+
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            connectToServer();
+                        }
+                    }.start();
+
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            while (!connected) {
+                                try {
+                                    Thread.sleep(500);
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                            dialog.setVisible(false);
+                            Game g = new Game(true, text.getText(), host);
+                            frame.dispose();
+                        }
+                    }.start();
+
                 }
 
             }
@@ -73,6 +113,7 @@ public class Host {
         frame.setSize(500,200);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(aFrame);
         frame.setVisible(true);
     }
 
@@ -86,4 +127,48 @@ public class Host {
         return true;
     }
 
+    public void connectToServer() {
+        try {
+            host = InetAddress.getLocalHost();
+        } catch (UnknownHostException unknownEx) {
+            System.out.println("Host ID not found!");
+            System.exit(1);
+        }
+
+        Socket link = null;
+
+        try
+        {
+            link = new Socket(host,PORT);
+            Scanner input =	new Scanner(link.getInputStream());
+            PrintWriter output = new PrintWriter(link.getOutputStream(), true);
+
+            System.out.println("okok");
+
+            output.println("1: connecting");
+
+            System.out.println("ok");
+
+            String response = input.nextLine();
+
+            output.println("SET:" + phrase);
+
+            System.out.println("okokok");
+
+            System.out.println("\n" + response);
+
+
+            waitForSecond(link, input, output);
+
+        } catch(IOException ioEx) {
+            ioEx.printStackTrace();
+        }
+    }
+
+    public void waitForSecond(Socket socket, Scanner input, PrintWriter output) {
+        String message = input.nextLine();
+        System.out.println(message);
+
+        connected = true;
+    }
 }

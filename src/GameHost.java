@@ -77,6 +77,8 @@ public class GameHost {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
+
+        //New thread is made to run separately from the GUI, this thread will retrieve guesses from the other player and update the GUI in real-time
         new Thread() {
             Socket link = null;
             Scanner input = null;
@@ -92,6 +94,7 @@ public class GameHost {
                     ioEx.printStackTrace();
                 }
 
+                //Infinite loop to keep accepting inputs while the other player is guessing, GUI is updated after the response comes in
                 while (true) {
                     String message[] = input.nextLine().split(" ");
 

@@ -54,10 +54,6 @@ public class Host {
                 else {
 
                     Host.phrase = text.getText();
-                    System.out.println(Host.phrase);
-
-
-//                  DISPOSE AFTER CONNECTION ESTABLISHED
 
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Waiting...");
@@ -143,20 +139,9 @@ public class Host {
             Scanner input =	new Scanner(link.getInputStream());
             PrintWriter output = new PrintWriter(link.getOutputStream(), true);
 
-            System.out.println("okok");
-
             output.println("1: connecting");
-
-            System.out.println("ok");
-
             String response = input.nextLine();
-
             output.println("SET:" + phrase);
-
-            System.out.println("okokok");
-
-            System.out.println("\n" + response);
-
 
             waitForSecond(link, input, output);
 
@@ -167,7 +152,6 @@ public class Host {
 
     public void waitForSecond(Socket socket, Scanner input, PrintWriter output) {
         String message = input.nextLine();
-        System.out.println(message);
 
         connected = true;
     }

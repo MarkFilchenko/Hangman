@@ -25,7 +25,6 @@ public class Server {
 
             while (true) {
                 Socket socket = serverSocket.accept();
-                System.out.println("Connected!");
                 connectedCount++;
                 ServerThread serverThread = null;
                 if (connectedCount == 1) {
@@ -64,14 +63,12 @@ class ServerThread extends Thread {
     }
 
     public void run() {
+        System.out.println("Connected");
         do {
             String input[] = socketInput.nextLine().split(":");
-            for (int i = 0; i < input.length; i++) {
-                System.out.println(input[i]);
-            }
+
 
             if (input[0].equals("Retrieve")) {
-                System.out.println(Server.phrase);
                 socketOutput.println(Server.phrase);
                 return;
             } else if (input[0].charAt(0) == '1') {
@@ -79,28 +76,23 @@ class ServerThread extends Thread {
             } else if (input[0].charAt(0) == '2') {
                 socketOutput.println("2 connected");
             } else {
-                System.out.println("IT GOT INTO HERE ON " + input[0]);
                 if (input[0].equals("SET")) {
-                    System.out.println(input[1]);
                     Server.phrase = input[1];
-                    System.out.println(input[0] + input[1]);
                 } else {
                     if (Server.phrase.toUpperCase().contains(input[1])) {
                         for (ServerThread s: Server.clientThreads) {
                             s.socketOutput.println("YES " + input[1]);
-                            System.out.println(input[0]);
                         }
 
                     } else {
                         for (ServerThread s: Server.clientThreads) {
                             s.socketOutput.println("NO " + input[1]);
-                            System.out.println(input[0]);
                         }
                     }
                 }
             }
 
-            while (Server.connectedCount < 2) {
+            while (Server.connectedCount < 3) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException iEx) {
@@ -108,8 +100,7 @@ class ServerThread extends Thread {
                 }
             }
 
-            if (Server.connectedCount <= 2) {
-                System.out.println("Both connected");
+            if (Server.connectedCount <= 3) {
                 socketOutput.println("Both connected\n");
             }
             numOfInts--;

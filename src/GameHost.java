@@ -1,21 +1,16 @@
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GameHost {
-
     ArrayList<String> phraseArr = new ArrayList<>();
     String word;
     ArrayList<String> currentArr = new ArrayList<>();
@@ -35,7 +30,6 @@ public class GameHost {
         panel.setLayout(new BorderLayout());
 
         JPanel phrasePanel = new JPanel();
-//      FOR TESTING PURPOSES ONLY, set word = inputted word from host
         word = phrase;
 
         //Fill phraseArr with letters from word
@@ -101,9 +95,7 @@ public class GameHost {
                 }
 
                 while (true) {
-                    System.out.println("OKTesting");
                     String message[] = input.nextLine().split(" ");
-                    System.out.println("OK" + message[0]);
 
                     if (!solved) {
                         if (message[0].equals("YES")) {

@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
+/**
+ * A class that draws the stick figure.
+ */
 public class StickFigure extends JPanel {
 
     Boolean head = false;
@@ -11,6 +14,10 @@ public class StickFigure extends JPanel {
     Boolean leftLeg = false;
     Boolean rightLeg = false;
 
+    /**
+     * Draws the gallow and any needed body parts.
+     * @param g Graphics
+     */
     public void paintComponent(Graphics g) {
         g.drawLine(10,275,170,275);
         g.drawLine(90,275,90,50);
@@ -40,26 +47,44 @@ public class StickFigure extends JPanel {
         }
     }
 
+    /**
+     * Sets the head to true so that it is drawn.
+     */
     public void setHead() {
         head = true;
     }
 
+    /**
+     * Sets the body to true so that it is drawn.
+     */
     public void setBody() {
         body = true;
     }
 
+    /**
+     * Sets the left arm to true so that it is drawn.
+     */
     public void setLeftArm() {
         leftArm = true;
     }
 
+    /**
+     * Sets the right arm to true so that it is drawn.
+     */
     public void setRightArm() {
         rightArm = true;
     }
 
+    /**
+     * Sets the left leg to true so that it is drawn.
+     */
     public void setLeftLeg() {
         leftLeg = true;
     }
 
+    /**
+     * Sets the right leg to true so that it is drawn.
+     */
     public void setRightLeg() {
         rightLeg = true;
     }

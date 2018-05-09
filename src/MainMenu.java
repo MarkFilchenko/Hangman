@@ -3,8 +3,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * A class to create the main menu.
+ */
 public class MainMenu {
 
+    //Creates main menu with buttons to host and join a game
     public MainMenu() {
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();

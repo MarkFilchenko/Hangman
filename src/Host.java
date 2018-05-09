@@ -9,13 +9,15 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+/**
+ * A class that manages what happens after "Host a Game" is clicked.
+ */
 public class Host {
 
     public int PORT = 1234;
     public InetAddress host;
     public boolean connected = false;
     public static String phrase;
-
 
     public Host(JFrame aFrame) {
         JFrame frame = new JFrame();
@@ -26,6 +28,8 @@ public class Host {
 
         JPanel heading = new JPanel();
         heading.setLayout(new GridLayout(2,1));
+
+        //Prompts host to enter a word or phrase
         JLabel title = new JLabel("Enter a word or phrase:", SwingConstants.CENTER);
         JLabel note = new JLabel("(must be less than 19 characters)", SwingConstants.CENTER);
 
@@ -42,15 +46,19 @@ public class Host {
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //Checks if word/phrase contains only letters of the alphabet
                 if (!isAlpha(text.getText())) {
                     JOptionPane.showMessageDialog(frame, "Your word/phrase should only contain letters!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
+                //Checks if word/phrase does not start with a space or has extra spaces
                 else if (text.getText().startsWith(" ") || text.getText().contains("  ")){
                     JOptionPane.showMessageDialog(frame, "Too many spaces!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
+                //Checks if word/phrase is empty
                 else if (text.getText().length() == 0) {
                     JOptionPane.showMessageDialog(frame, "Please enter a word/phrase.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
+                //Checks if word/phrase is more than 18 characters
                 else if (text.getText().length() > 18) {
                     JOptionPane.showMessageDialog(frame, "Your word/phrase should be less than 19 characters", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -58,6 +66,7 @@ public class Host {
 
                     Host.phrase = text.getText();
 
+                    //Waits for player 2 to connect
                     JDialog dialog = new JDialog();
                     dialog.setTitle("Waiting...");
                     JOptionPane wait = null;

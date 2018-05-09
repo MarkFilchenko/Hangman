@@ -4,10 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Join {
 
@@ -36,57 +35,49 @@ public class Join {
         join.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                connectToServer(text.getText());
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException iEx) {
-                    iEx.printStackTrace();
-                }
-
-//              FOR TESTING PURPOSES ONLY
-//                try {
-//                    JOptionPane.showMessageDialog(frame, "Joining game\nIP: " + InetAddress.getLocalHost().getHostAddress(), "Joining...", JOptionPane.INFORMATION_MESSAGE);
-//                } catch (UnknownHostException e1) {
-//                    e1.printStackTrace();
-//                }
-
-
-//              ADD CHECKS HERE: IF IP ADDRESS IS VALID
-//
-//              DISPOSE DIALOG AFTER CONNECTION ESTABLISHED
-                JDialog dialog = new JDialog();
-                dialog.setTitle("Joining...");
-                JOptionPane wait = new JOptionPane("Joining game\nIP: " + Join.host.getHostAddress(), JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
-
-                dialog.setContentPane(wait);
-                dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-                dialog.pack();
-                dialog.setLocationRelativeTo(frame);
-                dialog.setVisible(true);
-
-                new Thread() {
-                    @Override
-                    public void run() {
+                if (text.getText().equals("")) {
+                    JOptionPane.showMessageDialog(frame, "The IP address cannot be empty!!", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    try {
                         connectToServer(text.getText());
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(frame, "The host does not exist or is not running a server!", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
                     }
-                }.start();
 
-                new Thread() {
-                    @Override
-                    public void run() {
-                        Join.phrase = getPhrase();
-                        while (!connected && !gotString) {
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                        dialog.setVisible(false);
-                        Game g = new Game(false, Join.phrase, Join.host);
-                        frame.dispose();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException iEx) {
+                        iEx.printStackTrace();
                     }
-                }.start();
+
+                    JDialog dialog = new JDialog();
+                    dialog.setTitle("Joining...");
+                    JOptionPane wait = new JOptionPane("Joining game\nIP: " + text.getText(), JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+
+                    dialog.setContentPane(wait);
+                    dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                    dialog.pack();
+                    dialog.setLocationRelativeTo(frame);
+                    dialog.setVisible(true);
+
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            Join.phrase = getPhrase();
+                            while (!connected && !gotString) {
+                                try {
+                                    Thread.sleep(500);
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                            dialog.setVisible(false);
+                            Game g = new Game(false, Join.phrase, Join.host);
+                            frame.dispose();
+                        }
+                    }.start();
+                }
             }
         });
 
@@ -106,16 +97,23 @@ public class Join {
         frame.setVisible(true);
     }
 
-    public void connectToServer(String aHost) {
+    public void connectToServer(String aHost) throws Exception {
         try {
             Join.host = InetAddress.getByName(aHost);
         } catch (UnknownHostException uEx) {
-            System.out.println("Host does not exist or is not running a game!");
-            uEx.printStackTrace();
+            throw new Exception();
         }
         Socket link;
         try
         {
+            Socket sock = new Socket();
+            final int timeOut = (int) TimeUnit.SECONDS.toMillis(2); // 5 sec wait period
+            try {
+                sock.connect(new InetSocketAddress(Join.host, PORT), timeOut);
+            } catch (SocketTimeoutException ex) {
+                throw new Exception();
+            }
+
             link = new Socket(Join.host,PORT);
             Scanner input =	new Scanner(link.getInputStream());
             PrintWriter output = new PrintWriter(link.getOutputStream(), true);
@@ -125,21 +123,15 @@ public class Join {
             String response = input.nextLine();
 
             String response2 = input.nextLine();
-            System.out.println("\n" + response);
-            System.out.println("\n" + response2);
 
             connected = true;
 
 
 
-        }
-        catch(IOException ioEx)
-        {
+        } catch(IOException ioEx) {
             ioEx.printStackTrace();
-        }
-        finally
-        {
-            System.out.println("\n* Waiting");
+        } catch (Exception e) {
+            throw new Exception();
         }
     }
 
@@ -155,16 +147,10 @@ public class Join {
             output.println("Retrieve");
 
             phrase = input.nextLine();
-
-            System.out.println("\nWOAHAOAH" + phrase);
         }
         catch(IOException ioEx)
         {
             ioEx.printStackTrace();
-        }
-        finally
-        {
-            System.out.println("\n* Waiting");
         }
         gotString = true;
         return phrase;

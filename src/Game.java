@@ -20,13 +20,11 @@ public class Game {
     String currentWord;
     Boolean solved = false;
     int numOfErrors = 0;
-    boolean disabled = false;
     public int PORT = 1234;
     public InetAddress host;
 
     public Game(String phrase, InetAddress aHost) {
         host = aHost;
-        this.disabled = disabled;
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
@@ -66,9 +64,6 @@ public class Game {
         for (char alphabet = 'A'; alphabet <= 'Z'; alphabet++) {
             JButton button = new JButton(Character.toString(alphabet));
             buttons.add(button);
-            if (disabled) {
-                button.setEnabled(false);
-            }
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -77,6 +72,8 @@ public class Game {
                     String[] response = null;
                     try
                     {
+                        //On every button press, sets up Socket, Scanner, PrintWriter and sends the guess to the server
+                        //Gets the response from the server which is YES if the letter is correct or NO if it is not
                         link = new Socket(host,PORT);
                         Scanner input =	new Scanner(link.getInputStream());
                         PrintWriter output = new PrintWriter(link.getOutputStream(), true);
@@ -180,6 +177,7 @@ public class Game {
         frame.setVisible(true);
     }
 
+    //Checks if character is letter or something else, false is returned if something else
     public static boolean isAlpha(String s) {
         char[]chars = s.toCharArray();
         for (char c : chars) {

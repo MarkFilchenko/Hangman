@@ -17,13 +17,11 @@ public class GameHost {
     String currentWord;
     Boolean solved = false;
     int numOfErrors = 0;
-    boolean disabled = false;
     public int PORT = 1234;
     public InetAddress host;
 
     public GameHost(String phrase, InetAddress aHost) {
         host = aHost;
-        this.disabled = disabled;
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
@@ -173,7 +171,7 @@ public class GameHost {
 
     }
 
-
+    //Checks if character is letter or something else, false is returned if something else
     public static boolean isAlpha(String s) {
         char[]chars = s.toCharArray();
         for (char c : chars) {

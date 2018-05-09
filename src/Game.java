@@ -12,6 +12,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * A class for the game view.
+ */
 public class Game {
 
     ArrayList<String> phraseArr = new ArrayList<>();
@@ -52,12 +55,16 @@ public class Game {
             }
         }
 
+        //Joins currentWord into one string
         currentWord = String.join("", currentArr);
         phraseTextField.setText(currentWord);
 
         phrasePanel.add(phraseTextField);
+
+        //Initializes stick figure
         StickFigure s = new StickFigure();
 
+        //Creates the buttons panel
         JPanel buttons = new JPanel();
         buttons.setBorder(new EmptyBorder(30,30,0,0));
         buttons.setLayout(new GridLayout(5, 6));
@@ -90,11 +97,13 @@ public class Game {
                     if (!solved) {
                         if (response[0].equals("YES")) {
                             button.setEnabled(false);
+                            //Updates the JTextField as player guesses
                             for (int i = 0; i < phraseArr.size(); i++) {
                                 if (phraseArr.get(i).equals(button.getText().toLowerCase())) {
                                     currentArr.set(i,phraseArr.get(i));
                                 }
                             }
+                            //Joins currentWord into one string
                             currentWord = String.join("", currentArr);
                             phraseTextField.setText(currentWord);
                             if (!currentArr.contains("_ ")) {
@@ -116,6 +125,7 @@ public class Game {
                             }
                         }
                         else {
+                            //Paints body parts based on number of errors
                             button.setEnabled(false);
                             numOfErrors++;
                             if (numOfErrors == 1) {

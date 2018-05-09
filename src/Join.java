@@ -8,6 +8,9 @@ import java.net.*;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A class that manages what happens after "Join a Game" is clicked.
+ */
 public class Join {
 
     public int PORT = 1234;
@@ -23,6 +26,7 @@ public class Join {
         panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         panel.setLayout(new BorderLayout());
 
+        //Prompts player to enter an IP address
         JLabel title = new JLabel("Enter IP Address:", SwingConstants.CENTER);
 
         JPanel tf = new JPanel(new BorderLayout());

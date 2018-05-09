@@ -45,6 +45,9 @@ public class Host {
                 if (!isAlpha(text.getText())) {
                     JOptionPane.showMessageDialog(frame, "Your word/phrase should only contain letters!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
+                else if (text.getText().startsWith(" ") || text.getText().contains("  ")){
+                    JOptionPane.showMessageDialog(frame, "Too many spaces!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
                 else if (text.getText().length() == 0) {
                     JOptionPane.showMessageDialog(frame, "Please enter a word/phrase.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -87,7 +90,7 @@ public class Host {
                                 }
                             }
                             dialog.setVisible(false);
-                            GameHost g = new GameHost(true, text.getText(), host);
+                            GameHost g = new GameHost(text.getText(), host);
                             frame.dispose();
                         }
                     }.start();

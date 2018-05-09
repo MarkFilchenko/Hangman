@@ -1,8 +1,4 @@
-import com.sun.xml.internal.ws.fault.ServerSOAPFaultException;
-
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -63,10 +59,8 @@ class ServerThread extends Thread {
     }
 
     public void run() {
-        System.out.println("Connected");
         do {
             String input[] = socketInput.nextLine().split(":");
-
 
             if (input[0].equals("Retrieve")) {
                 socketOutput.println(Server.phrase);

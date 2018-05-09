@@ -73,7 +73,7 @@ public class Join {
                                 }
                             }
                             dialog.setVisible(false);
-                            Game g = new Game(false, Join.phrase, Join.host);
+                            Game g = new Game(Join.phrase, Join.host);
                             frame.dispose();
                         }
                     }.start();
@@ -119,14 +119,10 @@ public class Join {
             PrintWriter output = new PrintWriter(link.getOutputStream(), true);
 
             output.println("2: connecting");
-
             String response = input.nextLine();
-
             String response2 = input.nextLine();
 
             connected = true;
-
-
 
         } catch(IOException ioEx) {
             ioEx.printStackTrace();

@@ -21,7 +21,7 @@ public class GameHost {
     public int PORT = 1234;
     public InetAddress host;
 
-    public GameHost(boolean disabled, String phrase, InetAddress aHost) {
+    public GameHost(String phrase, InetAddress aHost) {
         host = aHost;
         this.disabled = disabled;
         JFrame frame = new JFrame();

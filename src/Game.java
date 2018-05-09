@@ -1,5 +1,3 @@
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -11,7 +9,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -27,7 +24,7 @@ public class Game {
     public int PORT = 1234;
     public InetAddress host;
 
-    public Game(boolean disabled, String phrase, InetAddress aHost) {
+    public Game(String phrase, InetAddress aHost) {
         host = aHost;
         this.disabled = disabled;
         JFrame frame = new JFrame();
@@ -36,7 +33,6 @@ public class Game {
         panel.setLayout(new BorderLayout());
 
         JPanel phrasePanel = new JPanel();
-//      FOR TESTING PURPOSES ONLY, set word = inputted word from host
         word = phrase;
 
         //Fill phraseArr with letters from word
@@ -62,7 +58,6 @@ public class Game {
         phraseTextField.setText(currentWord);
 
         phrasePanel.add(phraseTextField);
-
         StickFigure s = new StickFigure();
 
         JPanel buttons = new JPanel();
@@ -172,7 +167,6 @@ public class Game {
             });
         }
 
-
         panel.add(phrasePanel, BorderLayout.NORTH);
         panel.add(s, BorderLayout.CENTER);
         panel.add(buttons, BorderLayout.EAST);
@@ -184,19 +178,6 @@ public class Game {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
-        if (disabled) {
-            Socket link = null;
-            Scanner input = null;
-            PrintWriter output = null;
-            try {
-                link = new Socket(host,PORT);
-                input =	new Scanner(link.getInputStream());
-                output = new PrintWriter(link.getOutputStream(), true);
-            } catch (IOException ioEx) {
-                ioEx.printStackTrace();
-            }
-        }
     }
 
     public static boolean isAlpha(String s) {

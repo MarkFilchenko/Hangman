@@ -1,3 +1,5 @@
+import com.sun.xml.internal.ws.fault.ServerSOAPFaultException;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,7 +12,7 @@ import java.util.Scanner;
 public class Server {
     private static ServerSocket serverSocket;
     private static final int PORT = 1234;
-    private static ArrayList<ServerThread> clientThreads = new ArrayList<ServerThread>();
+    public static ArrayList<ServerThread> clientThreads = new ArrayList<ServerThread>();
     public static int connectedCount = 0;
     public static String phrase = null;
 
@@ -84,11 +86,16 @@ class ServerThread extends Thread {
                     System.out.println(input[0] + input[1]);
                 } else {
                     if (Server.phrase.toUpperCase().contains(input[1])) {
-                        socketOutput.println("YES");
-                        System.out.println(input[0]);
+                        for (ServerThread s: Server.clientThreads) {
+                            s.socketOutput.println("YES " + input[1]);
+                            System.out.println(input[0]);
+                        }
+
                     } else {
-                        socketOutput.println("NO");
-                        System.out.println(input[1]);
+                        for (ServerThread s: Server.clientThreads) {
+                            s.socketOutput.println("NO " + input[1]);
+                            System.out.println(input[0]);
+                        }
                     }
                 }
             }

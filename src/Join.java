@@ -156,7 +156,7 @@ public class Join {
 
             phrase = input.nextLine();
 
-            System.out.println("\n" + phrase);
+            System.out.println("\nWOAHAOAH" + phrase);
         }
         catch(IOException ioEx)
         {

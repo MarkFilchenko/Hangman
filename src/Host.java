@@ -91,7 +91,7 @@ public class Host {
                                 }
                             }
                             dialog.setVisible(false);
-                            Game g = new Game(true, text.getText(), host);
+                            GameHost g = new GameHost(true, text.getText(), host);
                             frame.dispose();
                         }
                     }.start();

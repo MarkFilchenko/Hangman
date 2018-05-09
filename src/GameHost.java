@@ -1,4 +1,3 @@
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -15,7 +14,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Game {
+public class GameHost {
 
     ArrayList<String> phraseArr = new ArrayList<>();
     String word;
@@ -27,7 +26,7 @@ public class Game {
     public int PORT = 1234;
     public InetAddress host;
 
-    public Game(boolean disabled, String phrase, InetAddress aHost) {
+    public GameHost(boolean disabled, String phrase, InetAddress aHost) {
         host = aHost;
         this.disabled = disabled;
         JFrame frame = new JFrame();
@@ -71,35 +70,45 @@ public class Game {
         for (char alphabet = 'A'; alphabet <= 'Z'; alphabet++) {
             JButton button = new JButton(Character.toString(alphabet));
             buttons.add(button);
-            if (disabled) {
-                button.setEnabled(false);
-            }
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    Socket link = null;
-                    String message = "";
-                    String[] response = null;
-                    try
-                    {
-                        link = new Socket(host,PORT);
-                        Scanner input =	new Scanner(link.getInputStream());
-                        PrintWriter output = new PrintWriter(link.getOutputStream(), true);
+            button.setEnabled(false);
+        }
 
-                        output.println("GUESS:" + button.getText());
+        panel.add(phrasePanel, BorderLayout.NORTH);
+        panel.add(s, BorderLayout.CENTER);
+        panel.add(buttons, BorderLayout.EAST);
 
-                        message = input.nextLine();
-                        response = message.split(" ");
-                    }
-                    catch(IOException ioEx)
-                    {
-                        ioEx.printStackTrace();
-                    }
+        frame.setLayout(new BorderLayout());
+        frame.add(panel, BorderLayout.CENTER);
+
+        frame.setSize(700,400);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+        new Thread() {
+            Socket link = null;
+            Scanner input = null;
+            PrintWriter output = null;
+
+            @Override
+            public void run() {
+                try {
+                    link = new Socket(host,PORT);
+                    input =	new Scanner(link.getInputStream());
+                    output = new PrintWriter(link.getOutputStream(), true);
+                } catch (IOException ioEx) {
+                    ioEx.printStackTrace();
+                }
+
+                while (true) {
+                    System.out.println("OKTesting");
+                    String message[] = input.nextLine().split(" ");
+                    System.out.println("OK" + message[0]);
+
                     if (!solved) {
-                        if (response[0].equals("YES")) {
-                            button.setEnabled(false);
+                        if (message[0].equals("YES")) {
                             for (int i = 0; i < phraseArr.size(); i++) {
-                                if (phraseArr.get(i).equals(button.getText().toLowerCase())) {
+                                if (phraseArr.get(i).equals(message[1].toLowerCase())) {
                                     currentArr.set(i,phraseArr.get(i));
                                 }
                             }
@@ -109,7 +118,7 @@ public class Game {
                                 solved = true;
                                 JDialog dialog = new JDialog();
                                 dialog.setTitle("Game Over");
-                                JOptionPane d = new JOptionPane("YOU WIN!", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+                                JOptionPane d = new JOptionPane("YOU LOSE!", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
                                 dialog.setContentPane(d);
                                 dialog.pack();
                                 dialog.setLocationRelativeTo(frame);
@@ -124,7 +133,6 @@ public class Game {
                             }
                         }
                         else {
-                            button.setEnabled(false);
                             numOfErrors++;
                             if (numOfErrors == 1) {
                                 s.setHead();
@@ -152,7 +160,7 @@ public class Game {
 
                                 JDialog dialog = new JDialog();
                                 dialog.setTitle("Game Over");
-                                JOptionPane d = new JOptionPane("YOU LOSE!", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+                                JOptionPane d = new JOptionPane("YOU WIN!", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
                                 dialog.setContentPane(d);
                                 dialog.pack();
                                 dialog.setLocationRelativeTo(frame);
@@ -166,38 +174,13 @@ public class Game {
                                 });
                             }
                         }
-
                     }
                 }
-            });
-        }
-
-
-        panel.add(phrasePanel, BorderLayout.NORTH);
-        panel.add(s, BorderLayout.CENTER);
-        panel.add(buttons, BorderLayout.EAST);
-
-        frame.setLayout(new BorderLayout());
-        frame.add(panel, BorderLayout.CENTER);
-
-        frame.setSize(700,400);
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
-        if (disabled) {
-            Socket link = null;
-            Scanner input = null;
-            PrintWriter output = null;
-            try {
-                link = new Socket(host,PORT);
-                input =	new Scanner(link.getInputStream());
-                output = new PrintWriter(link.getOutputStream(), true);
-            } catch (IOException ioEx) {
-                ioEx.printStackTrace();
             }
-        }
+        }.start();
+
     }
+
 
     public static boolean isAlpha(String s) {
         char[]chars = s.toCharArray();

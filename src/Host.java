@@ -72,6 +72,7 @@ public class Host {
                     dialog.setLocationRelativeTo(frame);
                     dialog.setVisible(true);
 
+                    //New thread is made for the connection to the server so it does not interfere with the GUI thread
                     new Thread() {
                         @Override
                         public void run() {
@@ -79,6 +80,8 @@ public class Host {
                         }
                     }.start();
 
+                    //New thread is made for checking if the connection is fully established, it waits half a second between each check
+                    //If connection is established, GameHost is started and the current window is closed
                     new Thread() {
                         @Override
                         public void run() {
@@ -116,6 +119,7 @@ public class Host {
         frame.setVisible(true);
     }
 
+    //Checks if string contains anything other than letters or spaces, if it does then this method returns false
     public static boolean isAlpha(String s) {
         char[]chars = s.toCharArray();
         for (char c : chars) {
@@ -126,6 +130,7 @@ public class Host {
         return true;
     }
 
+    //Connects to server, since this is the host, the server tries to connect to localhost
     public void connectToServer() {
         try {
             host = InetAddress.getLocalHost();
@@ -136,6 +141,9 @@ public class Host {
 
         Socket link = null;
 
+
+        //Socket, input and output are setup, the first string is sent to the server. After the server responds, the host sends the phrase to be guessed to the server
+        //This method then calls waitForSecond(...) after sending the phrase to the server
         try
         {
             link = new Socket(host,PORT);
@@ -153,6 +161,7 @@ public class Host {
         }
     }
 
+    //Waits for the second client to connect to the host so the game can start
     public void waitForSecond(Socket socket, Scanner input, PrintWriter output) {
         String message = input.nextLine();
 

@@ -19,6 +19,9 @@ public class Server {
             serverSocket = new ServerSocket(PORT);
             System.out.println("Waiting for client to connect");
 
+
+            //Server keeps accepting connections until closed, for every new connection, a new thread is made
+            //If the connection is the first one, there will be two inputs so a different parameter is passed for it
             while (true) {
                 Socket socket = serverSocket.accept();
                 connectedCount++;
@@ -47,6 +50,7 @@ class ServerThread extends Thread {
     PrintWriter socketOutput;
     int numOfInts;
 
+    //Constructor for the thread, sets up the socket and the input/output
     public ServerThread(Socket s, int numOfInts) {
         this.s = s;
         this.numOfInts = numOfInts;
@@ -58,10 +62,13 @@ class ServerThread extends Thread {
         }
     }
 
+    //Run when thread.start() goes, it gets an input and after figuring out what it is, outputs the correct String
+    //If it is the first thread (the host), it waits for a second client to connect so the game can start, it also runs twice to accept two strings
     public void run() {
         do {
             String input[] = socketInput.nextLine().split(":");
 
+            //Different options of input are Retrieve, 1, 2, SET, or GUESS
             if (input[0].equals("Retrieve")) {
                 socketOutput.println(Server.phrase);
                 return;

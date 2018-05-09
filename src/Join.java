@@ -97,7 +97,11 @@ public class Join {
         frame.setVisible(true);
     }
 
+
+    //Method to connect to the server with the IP Adress aHost
     public void connectToServer(String aHost) throws Exception {
+
+        //Gets the 
         try {
             Join.host = InetAddress.getByName(aHost);
         } catch (UnknownHostException uEx) {
